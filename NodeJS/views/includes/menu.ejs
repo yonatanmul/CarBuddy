@@ -1,0 +1,22 @@
+<header class="top">
+ <h1 class="logo">חבר לרכב</h1>
+ <nav>
+   <ul>
+     <li><a href="/" class="<%= path === '/' ? 'active' : '' %>">בית</a></li>
+     <li><a href="/maintenance" class="<%= path === '/maintenance' ? 'active' : '' %>">מאגר טיפולים</a></li>
+     <li><a href="/pricing" class="<%= path === '/pricing' ? 'active' : '' %>">מחירון</a></li>
+     <li><a href="/find-car" class="<%= path === '/find-car' ? 'active' : '' %>">מצא רכב</a></li>
+     <li><a href="/fuel" class="<%= path === '/fuel' ? 'active' : '' %>">יומן תדלוקים</a></li>
+     <% if (isLoggedIn) { %>
+       <li><a href="/profile" class="<%= path === '/profile' ? 'active' : '' %>">האיזור האישי</a></li>
+       <li><a href="/logout">יציאה</a></li>
+     <% } else { %>
+       <li><a href="/login" class="<%= path === '/login' ? 'active' : '' %>">התחברות</a></li>
+       <li><a href="/register" class="<%= path === '/register' ? 'active' : '' %>">הרשמה</a></li>
+     <% } %>
+   </ul>
+ </nav>
+</header>
+
+
+

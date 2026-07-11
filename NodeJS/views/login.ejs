@@ -1,0 +1,30 @@
+<%- include('includes/head.ejs') %>
+    <title>חבר לרכב - התחברות</title>
+  </head>
+  <body>
+<%- include('includes/menu.ejs') %>
+    <main>
+      <section class="auth">
+        <aside class="welcome">
+          <h2>ברוכים הבאים!</h2>
+          <p>התחברו כדי לתעד טיפולים, לעקוב אחרי הוצאות הדלק ולקבל המלצות על הרכב הבא שלכם.</p>
+          <p>כל הנתונים שלכם שמורים בחשבון אחד, ונגישים מכל מכשיר.</p>
+        </aside>
+        <form class="login-box" method="post" action="/login">
+          <h2>התחברות</h2>
+           <% if (success) { %>
+           <p class="form-success"><%= success %></p>
+            <% } %>
+          <% if (error) { %>
+            <p class="form-error"><%= error %></p>
+          <% } %>
+          <label for="username">שם משתמש:</label>
+          <input type="text" id="username" name="username" required/>
+          <label for="password">סיסמה:</label>
+          <input type="password" id="password" name="password" required/>
+          <button type="submit">התחבר</button>
+          <p class="auth-note">עדיין אין לך חשבון? <a href="/register">להרשמה</a></p>
+        </form>
+      </section>
+    </main>
+<%- include('includes/end.ejs') %>
