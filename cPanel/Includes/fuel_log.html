@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+ <head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>חבר לרכב - יומן תדלוקים</title>
+   <link rel="stylesheet" href="../CSS/style.css" />
+ </head>
+ <body>
+   <header class="top">
+     <h1 class="logo">חבר לרכב</h1>
+     <nav>
+       <ul>
+         <li><a href="http://vmedu475.mtacloud.co.il:3000/">בית</a></li>
+         <li><a href="http://vmedu475.mtacloud.co.il:3000/maintenance">מאגר טיפולים</a></li>
+         <li><a href="http://vmedu475.mtacloud.co.il:3000/pricing">מחירון</a></li>
+         <li><a href="http://vmedu475.mtacloud.co.il:3000/find-car">מצא רכב</a></li>
+         <li><a href="fuel_log.html">יומן תדלוקים</a></li>
+         <li><a href="http://vmedu475.mtacloud.co.il:3000/profile">האיזור האישי</a></li>
+         <li><a href="http://vmedu475.mtacloud.co.il:3000/logout">יציאה</a></li>
+       </ul>
+     </nav>
+   </header>
+
+
+   <main>
+     <section class="hero">
+       <img class="hero-icon" src="../Images/icon_fuel.png" alt="אייקון דלק" width="56" height="56" />
+       <h2>יומן תדלוקים</h2>
+       <p>עקבו אחרי כל תדלוק, ראו כמה אתם מוציאים על דלק ומה צריכת הדלק של הרכב שלכם.</p>
+     </section>
+
+
+     <section class="stats">
+       <article class="stat-card stat-wide">
+         <span class="stat-num">6.4 ל'/100 ק"מ</span>
+         <p>צריכת דלק ממוצעת בשלושת החודשים האחרונים</p>
+       </article>
+       <article class="stat-card">
+         <span class="stat-num">18</span>
+         <p>תדלוקים השנה</p>
+       </article>
+       <article class="stat-card">
+         <span class="stat-num">640 ₪</span>
+         <p>הוצאה החודש</p>
+       </article>
+     </section>
+
+
+     <section class="register">
+       <h2>הוספת תדלוק</h2>
+
+
+       <form class="form-box register-form" method="post" action="fuel_log.php" onsubmit="return validateFuel()">
+         <p id="fuelError" class="form-error"></p>
+
+
+         <p class="field">
+           <label for="fdate">תאריך:</label>
+           <input type="date" id="fdate" name="fdate" required />
+         </p>
+
+
+         <p class="field">
+           <label for="station">תחנת דלק:</label>
+           <input type="text" id="station" name="station" maxlength="50" />
+         </p>
+
+
+         <p class="field">
+           <label for="ftype">סוג דלק:</label>
+           <select id="ftype" name="ftype">
+             <option>בנזין 95</option>
+             <option>בנזין 98</option>
+             <option>סולר</option>
+             <option>חשמל</option>
+           </select>
+         </p>
+
+
+         <p class="field">
+           <label for="liters">ליטרים:</label>
+           <input type="number" step="0.01" min="0.01" id="liters" name="liters" oninput="calcTotal()" />
+         </p>
+
+
+         <p class="field">
+           <label for="perliter">מחיר לליטר (₪):</label>
+           <input type="number" step="0.01" min="0.01" id="perliter" name="perliter" oninput="calcTotal()" />
+         </p>
+
+
+         <p class="field">
+           <label for="total">סה"כ ששולם (₪):</label>
+           <input type="number" step="0.01" min="0.01" id="total" name="total" />
+         </p>
+
+
+         <p class="field">
+           <label for="odo">קילומטראז':</label>
+           <input type="number" id="odo" name="odo" min="0" />
+         </p>
+
+
+         <p class="field-submit">
+           <button type="submit">הוסף תדלוק</button>
+         </p>
+       </form>
+     </section>
+
+
+     <section class="records">
+       <h2>תדלוקים לדוגמה</h2>
+
+
+       <article class="price-block">
+         <table class="price-table">
+           <thead>
+             <tr>
+               <th>תאריך</th>
+               <th>תחנה</th>
+               <th>סוג דלק</th>
+               <th>ליטרים</th>
+               <th>מחיר לליטר (₪)</th>
+               <th>סה"כ (₪)</th>
+               <th>קילומטראז'</th>
+             </tr>
+           </thead>
+           <tbody>
+             <tr>
+               <td>02/06/2026</td>
+               <td>פז - תל אביב</td>
+               <td>בנזין 95</td>
+               <td>38</td>
+               <td>7.21</td>
+               <td>274</td>
+               <td>62,500</td>
+             </tr>
+             <tr>
+               <td>21/05/2026</td>
+               <td>דלק - הרצליה</td>
+               <td>בנזין 95</td>
+               <td>41</td>
+               <td>7.18</td>
+               <td>294</td>
+               <td>61,900</td>
+             </tr>
+             <tr>
+               <td>09/05/2026</td>
+               <td>סונול - נתניה</td>
+               <td>בנזין 95</td>
+               <td>35</td>
+               <td>7.25</td>
+               <td>254</td>
+               <td>61,300</td>
+             </tr>
+           </tbody>
+         </table>
+       </article>
+     </section>
+   </main>
+
+
+   <footer>
+     <section>
+       <h3>על האתר</h3>
+       <p>אתר לחובבי רכב בישראל. תיעוד, מחירונים והמלצות.</p>
+     </section>
+     <section>
+       <h3>קישורים</h3>
+       <ul>
+         <li><a href="http://vmedu475.mtacloud.co.il:3000/maintenance">מאגר טיפולים</a></li>
+         <li><a href="http://vmedu475.mtacloud.co.il:3000/pricing">מחירון</a></li>
+         <li><a href="http://vmedu475.mtacloud.co.il:3000/find-car">מצא רכב</a></li>
+         <li><a href="fuel_log.html">יומן תדלוקים</a></li>
+       </ul>
+     </section>
+     <section>
+       <h3>צור קשר</h3>
+       <p>טלפון: 03-1234567</p>
+       <p>אימייל: info@carbuddy.co.il</p>
+       <p class="social">
+         עקבו אחרינו:
+         <a href="#" title="בקרוב - עדיין לא מומש">פייסבוק</a>
+         ·
+         <a href="#" title="בקרוב - עדיין לא מומש">אינסטגרם</a>
+       </p>
+     </section>
+     <p class="copy">&copy; 2026 חבר לרכב. כל הזכויות שמורות.</p>
+   </footer>
+
+
+   <script>
+     function calcTotal() {
+       var liters = parseFloat(document.getElementById("liters").value);
+       var perliter = parseFloat(document.getElementById("perliter").value);
+       if (!isNaN(liters) && !isNaN(perliter)) {
+         document.getElementById("total").value = (liters * perliter).toFixed(2);
+       }
+     }
+
+
+     function validateFuel() {
+       var fdateField = document.getElementById("fdate");
+       var litersField = document.getElementById("liters");
+       var perliterField = document.getElementById("perliter");
+       var totalField = document.getElementById("total");
+       var odoField = document.getElementById("odo");
+       var liters = parseFloat(litersField.value);
+       var perliter = parseFloat(perliterField.value);
+       var total = parseFloat(totalField.value);
+       var odo = odoField.value;
+       var today = new Date().toISOString().split("T")[0];
+       var msg = document.getElementById("fuelError");
+       msg.innerHTML = "";
+       fdateField.classList.remove("invalid");
+       litersField.classList.remove("invalid");
+       perliterField.classList.remove("invalid");
+       totalField.classList.remove("invalid");
+       odoField.classList.remove("invalid");
+
+
+       if (fdateField.value === "" || fdateField.value > today) {
+         msg.innerHTML = "יש לבחור תאריך שאינו עתידי";
+         fdateField.classList.add("invalid");
+         return false;
+       }
+       if (isNaN(liters) || liters <= 0) {
+         msg.innerHTML = "כמות הליטרים חייבת להיות מספר גדול מאפס";
+         litersField.classList.add("invalid");
+         return false;
+       }
+       if (isNaN(perliter) || perliter <= 0) {
+         msg.innerHTML = "מחיר לליטר חייב להיות מספר גדול מאפס";
+         perliterField.classList.add("invalid");
+         return false;
+       }
+       if (isNaN(total) || total <= 0) {
+         msg.innerHTML = "הסכום ששולם חייב להיות מספר גדול מאפס";
+         totalField.classList.add("invalid");
+         return false;
+       }
+       if (odo < 0) {
+         msg.innerHTML = "קילומטראז' לא יכול להיות שלילי";
+         odoField.classList.add("invalid");
+         return false;
+       }
+       return true;
+     }
+
+
+     document.getElementById("fdate").max = new Date().toISOString().split("T")[0];
+   </script>
+ </body>
+</html>
+
+
+
