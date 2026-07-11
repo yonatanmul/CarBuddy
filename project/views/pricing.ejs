@@ -1,0 +1,157 @@
+<%- include('includes/head.ejs') %>
+   <title>חבר לרכב - מחירון</title>
+ </head>
+ <body>
+<%- include('includes/menu.ejs') %>
+
+
+   <main>
+     <section class="hero">
+       <img class="hero-icon" src="/images/icon_pricing.png" alt="אייקון מחירון" width="56" height="56" />
+       <h2>מחירון חלקים וטיפולים</h2>
+       <p>מאגר מחירים משוער של חלפים, צמיגים וטיפולים נפוצים במוסך - לבדיקה לפני שיוצאים לטיפול. אלו אינם הטיפולים שביצעתם, אלא מחירון ייחוס כללי.</p>
+     </section>
+
+
+     <section class="price-detail">
+       <article class="price-hero">
+         <span class="price-big">350-1,200 ₪</span>
+         <h3>טווח מחירים אופייני לטיפול</h3>
+         <p class="price-sub">המחיר בפועל תלוי בסוג הטיפול, ביצרן ובדגם הרכב</p>
+       </article>
+       <ul class="price-facts">
+         <li>החלפת שמן ופילטר: כ-350-600 ₪</li>
+         <li>סט צמיגים (4 יחידות): כ-1,200-2,400 ₪</li>
+         <li>החלפת רפידות בלם: כ-500-1,000 ₪</li>
+       </ul>
+     </section>
+
+
+     <section class="split">
+       <h2>הוספת פריט למחירון</h2>
+
+
+       <% if (saved) { %>
+         <p class="form-success">הפריט נוסף למחירון בהצלחה!</p>
+       <% } %>
+
+
+       <article class="col-main">
+         <form class="form-box register-form" method="post" action="/save-price">
+           <p class="field">
+             <label for="category">קטגוריה:</label>
+             <select id="category" name="category">
+               <option>חלפים וצמיגים</option>
+               <option>טיפולים במוסך</option>
+             </select>
+           </p>
+
+
+           <p class="field">
+             <label for="item">שם הפריט:</label>
+             <input type="text" id="item" name="item" required />
+           </p>
+
+
+           <p class="field">
+             <label for="model">דגם / סוג:</label>
+             <input type="text" id="model" name="model" required />
+           </p>
+
+
+           <p class="field">
+             <label for="maker">יצרן:</label>
+             <input type="text" id="maker" name="maker" required />
+           </p>
+
+
+           <p class="field">
+             <label for="supplier">ספק / מוסך:</label>
+             <input type="text" id="supplier" name="supplier" required />
+           </p>
+
+
+           <p class="field">
+             <label for="warranty">אחריות (חודשים):</label>
+             <input type="number" id="warranty" name="warranty" min="0" required />
+           </p>
+
+
+           <p class="field">
+             <label for="price">מחיר (₪):</label>
+             <input type="number" id="price" name="price" min="0" required />
+           </p>
+
+
+           <p class="field-submit">
+             <button type="submit">הוסף למחירון</button>
+           </p>
+         </form>
+       </article>
+
+
+       <aside class="col-side">
+         <h3>טיפ חיסכון</h3>
+         <p>השוו מחירים בין כמה מוסכים לפני שמתחייבים - הפער יכול להגיע לעשרות אחוזים.</p>
+         <h3>איך משתמשים?</h3>
+         <p>סננו את המחירון לפי קטגוריה כדי למצוא מהר את מה שאתם צריכים.</p>
+       </aside>
+     </section>
+
+
+     <section class="pricing">
+       <h2>כמה זה אמור לעלות?</h2>
+
+
+       <form class="filter-form" method="post" action="/pricing-filter">
+         <span>סינון לפי קטגוריה:</span>
+         <label><input type="radio" name="category" value="all" <%= selected === 'all' ? 'checked' : '' %> /> הכל</label>
+         <label><input type="radio" name="category" value="חלפים וצמיגים" <%= selected === 'חלפים וצמיגים' ? 'checked' : '' %> /> חלפים וצמיגים</label>
+         <label><input type="radio" name="category" value="טיפולים במוסך" <%= selected === 'טיפולים במוסך' ? 'checked' : '' %> /> טיפולים במוסך</label>
+         <button type="submit">סנן</button>
+       </form>
+
+
+       <article class="price-block">
+         <table class="price-table">
+           <thead>
+             <tr>
+               <th>פריט</th>
+               <th>יצרן</th>
+               <th>קטגוריה</th>
+               <th>דגם / התאמה</th>
+               <th>ספק / מוסך</th>
+               <th>אחריות (חודשים)</th>
+               <th>מחיר (₪)</th>
+             </tr>
+           </thead>
+           <tbody>
+             <% if (prices.length > 0) { %>
+               <% for (let x in prices) { %>
+                 <tr>
+                   <td><%= prices[x].item %></td>
+                   <td><%= prices[x].maker %></td>
+                   <td><%= prices[x].category %></td>
+                   <td><%= prices[x].model %></td>
+                   <td><%= prices[x].supplier %></td>
+                   <td><%= prices[x].warranty %></td>
+                   <td><%= prices[x].price %></td>
+                 </tr>
+               <% } %>
+             <% } else { %>
+               <tr>
+                 <td colspan="7">המחירון ריק. הוסיפו פריט ראשון בטופס שלמעלה.</td>
+               </tr>
+             <% } %>
+           </tbody>
+         </table>
+         <p class="note">* המחירים הם הערכה בלבד ועשויים להשתנות בין מוסך למוסך ובין דגמי הרכב.</p>
+       </article>
+     </section>
+   </main>
+
+
+<%- include('includes/end.ejs') %>
+
+
+

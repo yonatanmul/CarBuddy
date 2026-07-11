@@ -1,0 +1,201 @@
+<%- include('includes/head.ejs') %>
+   <title>חבר לרכב - מצא רכב</title>
+ </head>
+ <body>
+<%- include('includes/menu.ejs') %>
+
+
+   <main>
+     <section class="hero">
+       <img class="hero-icon" src="/images/icon_car.png" alt="אייקון רכב" width="56" height="56" />
+       <h2>מצא את הרכב הבא שלך</h2>
+       <p>בחרו תקציב, סוג הנעה ומספר מושבים - ונראה לכם אילו רכבים מהמאגר מתאימים לכם.</p>
+     </section>
+
+
+     <section class="split">
+       <h2>קונסולת החיפוש</h2>
+
+
+       <article class="col-main">
+         <% if (saved) { %>
+           <p class="form-success">הרכב נוסף למאגר בהצלחה!</p>
+         <% } %>
+
+
+         <form class="finder-form" method="post" action="/recommend" onsubmit="return validateFinder()">
+           <p id="finderError" class="form-error"></p>
+
+
+           <p class="field">
+             <label for="maxprice">תקציב מקסימלי (₪):</label>
+             <input type="number" id="maxprice" name="maxprice" value="150000" min="0" required />
+           </p>
+
+
+           <p class="field">
+             <label for="fuel">סוג הנעה:</label>
+             <select id="fuel" name="fuel">
+               <option value="all">כל סוגי ההנעה</option>
+               <option>בנזין</option>
+               <option>היברידי</option>
+               <option>חשמלי</option>
+               <option>דיזל</option>
+             </select>
+           </p>
+
+
+           <p class="field">
+             <label for="seats">מספר מושבים (לפחות):</label>
+             <input type="number" id="seats" name="seats" value="2" min="1" required />
+           </p>
+
+
+           <p class="field-submit">
+             <button type="submit">חפש רכב מתאים</button>
+           </p>
+         </form>
+       </article>
+
+
+       <aside class="col-side">
+         <h3>איך זה עובד?</h3>
+         <p>1. הגדירו תקציב מקסימלי בשקלים.</p>
+         <p>2. בחרו סוג הנעה - או "כל סוגי ההנעה" כדי לא להגביל.</p>
+         <p>3. קבעו מינימום מושבים ולחצו "חפש".</p>
+         <h3>טיפ</h3>
+         <p>אם לא נמצאו תוצאות, העלו את התקציב או הורידו את מספר המושבים.</p>
+       </aside>
+     </section>
+
+
+     <section class="results">
+       <% if (searched) { %>
+         <h2>נמצאו <%= cars.length %> רכבים מתאימים</h2>
+       <% } else { %>
+         <h2>כל הרכבים במאגר</h2>
+       <% } %>
+
+
+       <% if (cars.length > 0) { %>
+         <% for (let x in cars) { %>
+           <article class="car-result">
+             <span class="match"><%= cars[x].cbody %></span>
+             <h3><%= cars[x].cname %></h3>
+             <p><%= cars[x].cdesc %></p>
+             <p class="spec">יצרן: <%= cars[x].cmaker %> | <%= cars[x].cseats %> מושבים | שנת <%= cars[x].cyear %> | <%= cars[x].cfuel %></p>
+             <p class="price-tag">מחיר מחירון: <%= cars[x].cprice %> ₪</p>
+             <button value="<%= cars[x].id %>" onclick="openDetails('/car-details/', this.value)">לפרטים נוספים</button>
+           </article>
+         <% } %>
+       <% } else { %>
+         <article class="car-result">
+           <p>לא נמצאו רכבים שמתאימים לחיפוש. נסו תקציב גבוה יותר או פחות מושבים.</p>
+         </article>
+       <% } %>
+     </section>
+
+
+     <section class="stats">
+       <h2>המאגר במספרים</h2>
+       <article class="stat-card stat-wide">
+         <span class="stat-num"><%= cars.length %></span>
+         <p>רכבים ברשימה הנוכחית</p>
+       </article>
+       <article class="stat-card">
+         <span class="stat-num">4</span>
+         <p>סוגי הנעה זמינים</p>
+       </article>
+       <article class="stat-card">
+         <span class="stat-num">2-7</span>
+         <p>טווח מספר המושבים</p>
+       </article>
+     </section>
+
+
+     <section class="split">
+       <h2>הוספת רכב למאגר</h2>
+
+
+       <article class="col-main">
+         <form class="form-box register-form" method="post" action="/save-car">
+           <p class="field">
+             <label for="cname">שם הרכב:</label>
+             <input type="text" id="cname" name="cname" required />
+           </p>
+
+
+           <p class="field">
+             <label for="cmaker">יצרן:</label>
+             <input type="text" id="cmaker" name="cmaker" required />
+           </p>
+
+
+           <p class="field">
+             <label for="cyear">שנת דגם:</label>
+             <input type="number" id="cyear" name="cyear" min="1900" required />
+           </p>
+
+
+           <p class="field">
+             <label for="cseats">מספר מושבים:</label>
+             <input type="number" id="cseats" name="cseats" min="1" required />
+           </p>
+
+
+           <p class="field">
+             <label for="cbody">סוג רכב:</label>
+             <select id="cbody" name="cbody">
+               <option>קטן / עירוני</option>
+               <option>משפחתי</option>
+               <option>ג'יפון (SUV)</option>
+               <option>מסחרי</option>
+             </select>
+           </p>
+
+
+           <p class="field">
+             <label for="cfuel">סוג הנעה:</label>
+             <select id="cfuel" name="cfuel">
+               <option>בנזין</option>
+               <option>היברידי</option>
+               <option>חשמלי</option>
+               <option>דיזל</option>
+             </select>
+           </p>
+
+
+           <p class="field">
+             <label for="cprice">מחיר מחירון (₪):</label>
+             <input type="number" id="cprice" name="cprice" min="0" required />
+           </p>
+
+
+           <p class="field">
+             <label for="cdesc">תיאור קצר:</label>
+             <input type="text" id="cdesc" name="cdesc" required />
+           </p>
+
+
+           <p class="field-submit">
+             <button type="submit">הוסף רכב</button>
+           </p>
+         </form>
+       </article>
+
+
+       <aside class="col-side">
+         <h3>תרמו למאגר</h3>
+         <p>מכירים רכב מעולה שחסר כאן? הוסיפו אותו כדי שגם אחרים ימצאו אותו בחיפוש.</p>
+         <h3>מה כדאי למלא?</h3>
+         <p>תיאור קצר וברור, מחיר מחירון מעודכן וסוג הנעה מדויק - כך הרכב יופיע בתוצאות הנכונות.</p>
+       </aside>
+     </section>
+   </main>
+
+
+   <script src="/js/details.js"></script>
+<%- include('includes/end.ejs') %>
+
+
+
